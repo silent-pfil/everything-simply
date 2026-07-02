@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simply Everything · Phase 1</title>
+<meta name="description" content="Ten foundational sandboxes for children and curious minds. A developmental learning series exploring the building blocks of everything.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#000;--text:rgba(255,255,255,.88);--dim:rgba(255,255,255,.44);
+  --very-dim:rgba(255,255,255,.18);--faint:rgba(255,255,255,.09);
+  --border:rgba(255,255,255,.08);--font:'Courier New',Courier,monospace;
+}
+html{background:var(--bg);color:var(--text);font-family:var(--font);scroll-behavior:smooth;}
+body{min-height:100vh;position:relative;overflow-x:hidden;}
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.55;}
+main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 24px 80px;}
+
+/* ── hero ── */
+#hero{padding:100px 0 72px;text-align:center;}
+#hero-eyebrow{font-size:9px;letter-spacing:4px;color:var(--very-dim);text-transform:uppercase;margin-bottom:22px;}
+h1{font-size:clamp(28px,6vw,52px);letter-spacing:clamp(6px,2vw,14px);text-transform:uppercase;color:var(--text);font-weight:normal;line-height:1.1;margin-bottom:18px;}
+#hero-sub{font-size:10px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:36px;}
+#hero-rule{width:48px;height:1px;background:var(--border);margin:0 auto 36px;}
+#hero-intro{font-size:14px;line-height:1.9;color:var(--dim);max-width:520px;margin:0 auto;letter-spacing:.5px;}
+
+/* ── section headers ── */
+.section-header{margin:72px 0 28px;display:flex;align-items:center;gap:16px;}
+.section-tag{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--very-dim);}
+.section-rule{flex:1;height:1px;background:var(--border);}
+.section-title{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--dim);}
+
+/* ── sandbox grid ── */
+#sandbox-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.sbox{display:block;text-decoration:none;color:inherit;background:var(--faint);border:1px solid var(--border);padding:22px 20px 18px;transition:background .18s,border-color .18s;cursor:pointer;position:relative;}
+.sbox:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);}
+.sbox-stage{font-size:8px;letter-spacing:2.5px;color:var(--very-dim);text-transform:uppercase;margin-bottom:10px;}
+.sbox-name{font-size:16px;letter-spacing:3px;text-transform:uppercase;color:var(--text);margin-bottom:8px;}
+.sbox-desc{font-size:11px;line-height:1.7;color:var(--dim);letter-spacing:.3px;}
+.sbox-arrow{position:absolute;bottom:18px;right:18px;font-size:10px;color:var(--very-dim);transition:color .18s;}
+.sbox:hover .sbox-arrow{color:var(--dim);}
+
+/* ── prose sections ── */
+.prose{font-size:13px;line-height:2.0;color:var(--dim);letter-spacing:.4px;max-width:640px;}
+.prose + .prose{margin-top:20px;}
+.prose strong{color:rgba(255,255,255,.68);font-weight:normal;}
+
+/* ── tier diagram ── */
+#tier-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:28px 0;}
+.tier-block{background:var(--faint);border:1px solid var(--border);padding:14px 10px;text-align:center;}
+.tier-num{font-size:7px;letter-spacing:2px;color:var(--very-dim);text-transform:uppercase;margin-bottom:4px;}
+.tier-name{font-size:9px;letter-spacing:2.5px;color:var(--dim);text-transform:uppercase;}
+
+/* ── turing section ── */
+#turing{margin-top:80px;border-top:1px solid var(--border);padding-top:52px;}
+#turing-title{font-size:10px;letter-spacing:5px;color:var(--dim);text-transform:uppercase;margin-bottom:28px;}
+
+/* ── phase 2 teaser ── */
+#phase2{margin-top:80px;text-align:center;padding:52px 0;}
+#phase2-label{font-size:8px;letter-spacing:3px;color:var(--very-dim);text-transform:uppercase;margin-bottom:14px;}
+#phase2-title{font-size:clamp(18px,4vw,30px);letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.22);}
+#phase2-sub{font-size:10px;letter-spacing:3px;color:var(--very-dim);text-transform:uppercase;margin-top:12px;}
+
+/* ── footer ── */
+footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;gap:12px;}
+.footer-text{font-size:8px;letter-spacing:2.5px;color:var(--very-dim);text-transform:uppercase;}
+footer a{color:var(--very-dim);text-decoration:none;transition:color .15s;}
+footer a:hover{color:var(--dim);}
+
+@media(max-width:520px){
+  #hero{padding:72px 0 52px;}
+  #tier-row{grid-template-columns:repeat(2,1fr);}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<main>
+
+  <section id="hero">
+    <div id="hero-eyebrow">Silent · pfil</div>
+    <h1>Simply<br>Everything</h1>
+    <div id="hero-sub">Phase 1 &middot; Ten Foundational Sandboxes</div>
+    <div id="hero-rule"></div>
+    <p id="hero-intro">Ten interactive sandboxes introducing the building blocks of the world — shapes, colors, faces, numbers, sounds, patterns, opposites, sizes, space, and time — designed for the very beginning of understanding.</p>
+  </section>
+
+  <div class="section-header">
+    <span class="section-tag">The Series</span>
+    <div class="section-rule"></div>
+    <span class="section-title">Phase 1</span>
+  </div>
+
+  <div id="sandbox-grid">
+
+    <a class="sbox" href="./phase1/shapes.html">
+      <div class="sbox-stage">Stage 01</div>
+      <div class="sbox-name">Shapes</div>
+      <div class="sbox-desc">The geometry of everything. Every object in the world begins as one of these.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/colors.html">
+      <div class="sbox-stage">Stage 02</div>
+      <div class="sbox-name">Colors</div>
+      <div class="sbox-desc">Light divided into language. The first vocabulary of vision.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/faces.html">
+      <div class="sbox-stage">Stage 03</div>
+      <div class="sbox-name">Faces</div>
+      <div class="sbox-desc">Recognition before language. The most important thing to learn first.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/numbers.html">
+      <div class="sbox-stage">Stage 04</div>
+      <div class="sbox-name">Numbers</div>
+      <div class="sbox-desc">Quantity as concept. From none to many, in the right order.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/sounds.html">
+      <div class="sbox-stage">Stage 05</div>
+      <div class="sbox-name">Sounds</div>
+      <div class="sbox-desc">The ear as teacher. Real recordings — not approximations.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/patterns.html">
+      <div class="sbox-stage">Stage 06</div>
+      <div class="sbox-name">Patterns</div>
+      <div class="sbox-desc">Repetition as signal. Finding the rhythm hidden in visual sequences.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/opposites.html">
+      <div class="sbox-stage">Stage 07</div>
+      <div class="sbox-name">Opposites</div>
+      <div class="sbox-desc">The axis of contrast. Concepts that only exist in relation to each other.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/sizes.html">
+      <div class="sbox-stage">Stage 08</div>
+      <div class="sbox-name">Sizes</div>
+      <div class="sbox-desc">Relative scale. Comparing and sorting a world of varying things.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/spatial.html">
+      <div class="sbox-stage">Stage 09</div>
+      <div class="sbox-name">Spatial</div>
+      <div class="sbox-desc">Where things are. Behind, inside, under, beside — the grammar of location.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+    <a class="sbox" href="./phase1/clocks.html">
+      <div class="sbox-stage">Stage 10</div>
+      <div class="sbox-name">Clocks</div>
+      <div class="sbox-desc">Twelve ways to say the same time. This is that thing you've been hearing.</div>
+      <div class="sbox-arrow">&#8594;</div>
+    </a>
+
+  </div>
+
+  <div class="section-header" style="margin-top:80px;">
+    <span class="section-tag">The Design</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <p class="prose">Each sandbox is a self-contained learning environment built around the same four-tier architecture. The tiers scale with the child — or the learner — moving from passive observation toward active play at their own pace, on any device, with no instruction required.</p>
+
+  <div id="tier-row">
+    <div class="tier-block"><div class="tier-num">Tier I</div><div class="tier-name">Learn</div></div>
+    <div class="tier-block"><div class="tier-num">Tier II</div><div class="tier-name">Explore</div></div>
+    <div class="tier-block"><div class="tier-num">Tier III</div><div class="tier-name">Test</div></div>
+    <div class="tier-block"><div class="tier-num">Tier IV</div><div class="tier-name">Play</div></div>
+  </div>
+
+  <p class="prose">Phase 1 uses Tiers I, II, and IV. Tier III — where comprehension is tested — activates in Phase 2, when the concepts introduced here are ready to be recalled, not just recognized. <strong>No right or wrong exists in Phase 1.</strong> Only exposure, at the right pace, in the right order.</p>
+
+  <p class="prose" style="margin-top:20px;">A shared heartbeat engine called <strong>PulseTock</strong> runs through every sandbox — a subtle pulse that begins as a heartbeat and slowly becomes a clock tick as the series progresses, reaching its full reveal at Stage 10. The background scene — a night cosmos, mountains, stars — grows incrementally more visible with each stage, ending fully present at the close of Phase 1.</p>
+
+  <section id="turing">
+    <div id="turing-title">The Turing Academy for Man and Machine</div>
+
+    <p class="prose">These sandboxes were built with a larger idea in mind. What if the same patient, ordered, concept-by-concept curriculum a child needs is also exactly the curriculum an artificial mind needs? Not fine-tuning. Not prompt engineering. A genuine developmental introduction to the world — graded, epistemological, built on shared logic across all domains.</p>
+
+    <p class="prose" style="margin-top:20px;">Phase 1 is the proof of concept. <strong>Ten foundational concepts. Ten sandboxes. Built from scratch, in order, with intention.</strong> The Turing Academy is the broader framework: structured human-to-machine teaching, not as a test of intelligence, but as a method of cultivating it — in both directions.</p>
+
+    <p class="prose" style="margin-top:20px;">The curriculum continues. The question it's asking does too.</p>
+  </section>
+
+  <section id="phase2">
+    <div id="phase2-label">Coming Next</div>
+    <div id="phase2-title">Phase 2</div>
+    <div id="phase2-sub">Comprehension &middot; Recall &middot; Language &middot; Reasoning</div>
+  </section>
+
+  <footer>
+    <span class="footer-text">Simply Everything &middot; Phase 1 &middot; &copy; 2025</span>
+    <a class="footer-text" href="https://github.com/silent-pfil" target="_blank" rel="noopener">GitHub &rarr; silent&#8209;pfil</a>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  const cv=document.getElementById('bg-canvas');
+  const ctx=cv.getContext('2d');
+  let W,H,stars=[];
+  function resize(){
+    W=window.innerWidth;H=document.body.scrollHeight||window.innerHeight;
+    const dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    cv.style.width=W+'px';cv.style.height=H+'px';
+    ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);
+    stars=[];
+    const n=Math.floor(W*H/2200);
+    for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*.7+.15,a:Math.random()*.20+.04,p:Math.random()*Math.PI*2,s:.18+Math.random()*.35});
+    draw(0);
+  }
+  let t0=null;
+  function draw(ts){
+    if(!t0)t0=ts;const t=(ts-t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    // Sky gradient
+    const sky=ctx.createLinearGradient(0,0,0,H*.55);
+    sky.addColorStop(0,'#020610');sky.addColorStop(.5,'#060e18');sky.addColorStop(1,'#0a1420');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,W,H*.55);
+    ctx.fillStyle='#050704';ctx.fillRect(0,H*.55,W,H*.45);
+    // Stars
+    stars.forEach(s=>{
+      const a=s.a+(Math.sin(t*s.s+s.p)*.5+.5)*.08;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(215,220,255,'+a+')';ctx.fill();
+    });
+    // Vignette
+    const vig=ctx.createRadialGradient(W/2,H*.30,H*.10,W/2,H*.30,H*.75);
+    vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,.55)');
+    ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>setTimeout(resize,100));
+  resize();
+})();
+</script>
+
+</body>
+</html>
